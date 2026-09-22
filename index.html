@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="把本地项目整理成 AI 读得懂的上下文。离线、零依赖，无需 API Key。">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'none'; base-uri 'none'; form-action 'none'">
+  <title>Context Pocket · 把代码装进口袋</title>
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+  <script src="core.js" defer></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <header class="topbar"><a class="brand" href="./index.html"><span class="brand-icon">c<span>p</span></span> Context Pocket <span class="version">v1.0</span></a><div class="top-actions"><span class="local"><i></i><span data-i18n="local">仅在你的浏览器中处理</span></span><button id="language" class="quiet">EN</button><a href="https://github.com/tuitangziz/context-pocket-web" target="_blank" rel="noopener noreferrer">GitHub ↗</a></div></header>
+  <main>
+    <section class="hero"><div><div class="eyebrow">LESS COPYING. MORE CONTEXT.</div><h1 data-i18n="title">把代码装进口袋，<br>让 AI 更懂你的项目。</h1><p data-i18n="subtitle">选择文件，写下问题，带走一份清晰的上下文。<br>不用安装，不用 API Key，也不上传你的代码。</p></div><div class="hero-note"><span class="note-number">01 → 02 → 03</span><span data-i18n="steps">选代码 · 定任务 · 复制给 AI</span><div class="chips"><span>OFFLINE</span><span>OPEN SOURCE</span><span>NO DEPENDENCIES</span></div></div></section>
+    <section class="workspace" aria-label="Context workspace">
+      <aside class="panel files-panel"><div class="panel-title"><h2><span>01</span> <span data-i18n="files">项目文件</span></h2><button id="demo" class="quiet" data-i18n="demo">试试示例 ↗</button></div>
+        <div class="import-box"><span class="folder-art">⌑</span><strong data-i18n="pickTitle">从一个小项目开始</strong><p data-i18n="pickHelp">选择本地文件夹，或添加几个文件</p><div class="import-actions"><button id="choose-folder" class="primary" data-i18n="folder">选择文件夹</button><button id="choose-files" data-i18n="addFiles">选择文件</button></div><input type="file" id="folder-input" webkitdirectory multiple hidden><input type="file" id="files-input" multiple hidden></div>
+        <div class="file-toolbar"><input id="search" type="search" placeholder="搜索文件…" aria-label="搜索文件"><div><button id="select-all" class="quiet" data-i18n="selectAll">选中可见</button><button id="select-none" class="quiet" data-i18n="selectNone">取消可见</button><span id="file-count">0 files</span></div></div>
+        <div id="file-list" class="file-list"><div class="empty" data-i18n="empty">还没有文件<br><small>也可以先试试右上方的示例</small></div></div>
+        <details id="skipped-details" class="skip-details"><summary id="skipped-count">0 个文件已跳过</summary><ul id="skipped-list"></ul></details>
+        <p class="fineprint" data-i18n="importFoot">自动过滤依赖、构建产物、常见密钥文件。每次选择会替换当前项目。</p>
+      </aside>
+      <section class="panel task-panel"><div class="panel-title"><h2><span>02</span> <span data-i18n="task">告诉 AI 你想做什么</span></h2></div>
+        <label for="preset" data-i18n="presetLabel">从一个任务开始</label><select id="preset"><option value="explain">理解项目</option><option value="debug">排查问题</option><option value="review">代码审查</option><option value="test">补充测试</option></select>
+        <label for="instruction" data-i18n="instructionLabel">你的问题 / 任务要求</label><textarea id="instruction" rows="8" maxlength="12000" spellcheck="false"></textarea>
+        <label for="budget" data-i18n="budgetLabel">上下文预算（字符）</label><select id="budget"><option value="8000">8,000</option><option value="16000">16,000</option><option value="40000" selected>40,000</option><option value="100000">100,000</option><option value="200000">200,000</option></select><p class="field-hint" data-i18n="budgetHint">按文件路径排序，超出预算的整份文件会跳过；不截断代码。</p>
+        <label for="ignore" data-i18n="ignoreLabel">额外忽略规则</label><textarea id="ignore" rows="3" placeholder="tests/&#10;*.csv&#10;docs/**" spellcheck="false"></textarea><p class="field-hint" data-i18n="ignoreHint">每行一个 glob，支持 *、**、?。可从根目录 .contextignore 自动读取。不读取 .gitignore。</p>
+        <div class="privacy-card"><span>✓</span><div><strong data-i18n="privacyTitle">留在本地，先看再发</strong><p data-i18n="privacyText">自动遮盖常见 API Key 和密码格式，但无法识别所有秘密。复制给 AI 前，请检查右侧预览。</p></div></div>
+      </section>
+      <section class="panel preview-panel"><div class="panel-title"><h2><span>03</span> <span data-i18n="preview">带走上下文</span></h2><span class="format-tag">MARKDOWN</span></div>
+        <div class="stats"><div><strong id="included-stat">0</strong><span data-i18n="statFiles">已打包文件</span></div><div><strong id="tokens-stat">0</strong><span data-i18n="statTokens">估算 tokens ≈</span></div><div><strong id="redactions-stat">0</strong><span data-i18n="statRedactions">内容遮盖</span></div></div>
+        <div class="budget-meter"><span id="budget-meter-fill"></span></div><div class="budget-caption"><span id="char-count">0 / 40,000</span><span data-i18n="characters">字符 · 包含任务和目录</span></div>
+        <div id="budget-warning" class="warning" hidden></div>
+        <label for="preview" class="sr-only" data-i18n="previewLabel">生成的 Markdown 上下文</label><textarea id="preview" readonly spellcheck="false" placeholder="# Context Pocket&#10;&#10;你的下一次 AI 对话，从这里开始。"></textarea>
+        <div class="export-actions"><button id="copy" class="primary" disabled data-i18n="copy">复制上下文</button><button id="download" disabled data-i18n="download">下载 .md ↓</button></div><div class="preview-foot"><span data-i18n="tokenNote">Token 为粗略估算，不代表模型的真实计数。</span><button id="clear" class="quiet" data-i18n="clear">清空项目</button></div>
+      </section>
+    </section>
+    <footer><span>Context Pocket <span class="footer-dot">/</span> <span data-i18n="footer">小工具，让每次提问都有上下文。</span></span><span data-i18n="footerRight">无追踪 · 无服务器上传 · MIT License</span></footer>
+  </main><div id="status" role="status" aria-live="polite"></div>
+</body></html>

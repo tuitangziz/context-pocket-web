@@ -1,0 +1,9 @@
+{
+  "name": "context-pocket-web",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Turn local source files into focused AI context. Offline, no dependencies, no API key.",
+  "scripts": { "test": "node --test", "start": "node serve.cjs" },
+  "engines": { "node": ">=20" },
+  "license": "MIT"
+}
